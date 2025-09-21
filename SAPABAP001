@@ -1,0 +1,100 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P001
+*&---------------------------------------------------------------------*
+*&Lenght-#ki nokta(:) kullan#m#-Yorum sat#r#-Write komutu-Matematiksel i#lemler-IF ko#ulu-Case ko#ulu-Do döngüsü-WHILE döngüsü
+*&---------------------------------------------------------------------*
+REPORT zbk_p001.
+
+*DATA gv_desg1 TYPE i.
+*DATA gv_desg2 TYPE n LENGTH 10. "LENGTH kullanmazsak 1 basamakl# bir de#i#ken olurdu.
+
+DATA: gv_degs1 TYPE i, "(:) iki nokta kullanmak birden fazla de#i#keni bir defa DATA yazarak tan#mlam#za yarar.
+      gv_degs2 TYPE n LENGTH 10, "LENGTH kullanmazsak 1 basamakl# bir de#i#ken olurdu.
+      gv_sonuc TYPE i.
+
+gv_degs1 = 3.
+gv_degs2 = 36.
+
+WRITE: 'Birimci Say#=', gv_degs1.
+WRITE: / '#kinci Say#=', gv_degs2.
+
+*WRITE gv_degs1.
+*WRITE / gv_degs2. " '/' ifadesi bir alt sat#ra yazd#r demek.
+
+"Matematiksel ##lemler
+gv_sonuc = gv_degs1 + gv_degs2.
+WRITE: / 'Toplam=', gv_sonuc.
+
+gv_sonuc = gv_degs1 - gv_degs2.
+WRITE: / 'Fark=', gv_sonuc.
+
+gv_sonuc = gv_degs1 * gv_degs2.
+WRITE: / 'Çarp#m=', gv_sonuc.
+
+gv_sonuc = gv_degs1 / gv_degs2.
+WRITE: / 'Bölüm=', gv_sonuc.
+
+"IF Ko#ulu
+*IF gv_degs1 > gv_degs2.
+*WRITE / 'Birinci say# büyüktür.'.
+*ENDIF.
+*
+*IF gv_degs1 < gv_degs2.
+*WRITE / 'Birinci say# küçüktür.'.
+*ENDIF.
+*
+*IF gv_degs1 = gv_degs2.
+*WRITE / '#ki Say# E#ittir'.
+*ENDIF.
+
+IF gv_degs1 > gv_degs2.
+  WRITE / 'Birinci say# büyüktür.'.
+ELSEIF gv_degs1 < gv_degs2.
+  WRITE / 'Birinci say# küçüktür.'.
+ELSE.
+  WRITE / '#ki Say# E#ittir'.
+ENDIF.
+
+*IF gv_degs1=1.
+*  WRITE 'De#i#ken de#eri 1'.
+*ELSEIF gv_degs1=2.
+*  WRITE 'De#i#ken de#eri 2'.
+*ELSEIF gv_degs1=2.
+*  WRITE 'De#i#ken de#eri 2'.
+*ELSEIF gv_degs1=3.
+*  WRITE 'De#i#ken de#eri 3'.
+*ELSEIF gv_degs1=4.
+*  WRITE 'De#i#ken de#eri 4'.
+*ELSEIF gv_degs1=5.
+*  WRITE 'De#i#ken de#eri 5'.
+*ELSE.
+*  WRITE 'Hiçbir de#ere e#it de#il'.
+*ENDIF.
+
+"CASE Ko#ulu
+CASE gv_degs1.
+  WHEN 1.
+    WRITE 'De#i#ken de#eri 1'.
+  WHEN 2.
+    WRITE 'De#i#ken de#eri 2'.
+  WHEN 3.
+    WRITE 'De#i#ken de#eri 3'.
+  WHEN 4.
+    WRITE 'De#i#ken de#eri 4'.
+  WHEN 5.
+    WRITE 'De#i#ken de#eri 5'.
+  WHEN OTHERS.
+    WRITE 'Hiçbir de#ere e#it de#il'.
+ENDCASE.
+
+"DO döngüsü
+DO 10 TIMES.
+  gv_degs1 = gv_degs1 + 10.
+  WRITE: / 'Birinci de#eri on ekleyerek artt#r#yoruz.', gv_degs1.
+ENDDO.
+
+"WHILE döngüsü
+WHILE gv_degs1 < 106.
+  gv_degs1 = gv_degs1 + 1.
+  WRITE: / 'Birinci de#ere yüz alt#y# geçmeyecek kadar bir ekliyoruz.', gv_degs1.
+ENDWHILE.
