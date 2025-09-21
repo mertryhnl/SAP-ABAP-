@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P002
+*&---------------------------------------------------------------------*
+*&Variable-Structure-Table-Select-Update-Insert-Delete-Modify
+*&---------------------------------------------------------------------*
+REPORT zbk_p002.
+
+
+DATA:
+  "Variable
+  gv_persid    TYPE zbk_persid_de,
+  gv_persad    TYPE zbk_persad_de,
+  gv_perssoyad TYPE zbk_perssoyad_de,
+  gv_perscins  TYPE zbk_perscins_de,
+  "Structure
+  gs_pers_t    TYPE zbk_pers_t,
+  "Table
+  gt_pers_t    TYPE TABLE OF zbk_pers_t. "internal table
+
+
+
+
+"SELECT
+
+"Tüm tabloyu çekmek istersek.
+SELECT * FROM zbk_pers_t INTO TABLE gt_pers_t WHERE pers_id eq 1. "Where select ifademize ko#ul eklememizi sa#lar.
+
+"Structure çekmek istersek.
+SELECT SINGLE * FROM zbk_pers_t INTO gs_pers_t.
+
+"Tek bir sütun çekmek istersek.
+SELECT SINGLE PERS_ID FROM zbk_pers_t INTO gv_persid.
+
+
+
+"UPDATE
+
+*UPDATE zbk_pers_t SET pers_ad = 'Selami' where pers_id eq 2.
+
+
+
+*"Insert
+*gs_pers_t-pers_id = 7.
+*gs_pers_t-pers_ad = 'ÖKKE#'.
+*gs_pers_t-pers_soyad = 'YILMAZ'.
+*gs_pers_t-pers_cins = 'E'.
+*INSERT zbk_pers_t FROM gs_pers_t.
+
+
+
+*"DELETE
+*DELETE FROM zbk_pers_t WHERE pers_id eq 7.
+
+
+
+*"MODIFY
+*gs_pers_t-pers_id = 8.
+*gs_pers_t-pers_ad = 'ÖKKE#'.
+*gs_pers_t-pers_soyad = 'BARUT'.
+*gs_pers_t-pers_cins = 'E'.
+*MODIFY zbk_pers_t FROM gs_pers_t. "E#er structure içinde tablodaki sat#rla e#le#en de#er varsa UPDATE olarak yoksa INSERT olarak çal###r.
+
+gs_pers_t-pers_id = 8.
+gs_pers_t-pers_ad = 'AYTEN'.
+gs_pers_t-pers_soyad = 'BARUT'.
+gs_pers_t-pers_cins = 'K'.
+MODIFY zbk_pers_t FROM gs_pers_t. "E#er structure içinde tablodaki sat#rla e#le#en de#er varsa UPDATE olarak yoksa INSERT olarak çal###r.
