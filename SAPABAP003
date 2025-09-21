@@ -1,0 +1,33 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P003
+*&---------------------------------------------------------------------*
+*&Parameters-Select Options-Checkbox-Radio Button-Selection Screen
+*&---------------------------------------------------------------------*
+REPORT zbk_p003.
+TABLES: zbk_pers_t.
+
+DATA: gv_psoyad TYPE zbk_perssoyad_de.
+
+"PARAMETERS: Kullan#c#dan belirledi#imiz tipte veri giri#i sa#lad###m#z yap#.
+PARAMETERS: p_num1   TYPE int4,
+            p_persad TYPE zbk_persad_de.
+
+"SELECT-OPTIONS: Verileri çoklu, s#ral# yada filitreli seçebilece#imiz yap#. SELECT_OPTIONS yap#s#na olu#turulmu# veri vermemiz gerek direkt data element alamaz.
+SELECT-OPTIONS: s_psoyad FOR gv_psoyad,
+                s_pcins FOR zbk_pers_t-pers_cins. " X tablosunun Y kolununu al diyebiliriz.
+
+"CHECKBOX: ##aretle/i#aretleme” #eklinde Evet/Hay#r (true/false) tipi seçenek sunmak için kullan#lan parametre türüdür.
+PARAMETERS: p_cbox1 AS CHECKBOX.
+
+"RADIO BUTTON: Kullan#c#ya bir grup içinden sadece bir tanesini seçme imkân# veren parametre tipidir.
+SELECTION-SCREEN BEGIN OF BLOCK b1 WITH FRAME TITLE text-001.
+PARAMETERS: p_rdbtn1 RADIOBUTTON GROUP gr1,
+            p_rdbtn2 RADIOBUTTON GROUP gr1,
+            p_rdbtn3 RADIOBUTTON GROUP gr1.
+SELECTION-SCREEN END OF BLOCK b1.
+
+"SELECTION-SCREEN: #çine yaz#lan yap#lar# bir çerçeve içerisine al#r.
+SELECTION-SCREEN BEGIN OF BLOCK b2 WITH FRAME TITLE text-002.
+PARAMETERS: p_rdbtn4 RADIOBUTTON GROUP gr2,
+            p_rdbtn5 RADIOBUTTON GROUP gr2.
+SELECTION-SCREEN END OF BLOCK b2.
