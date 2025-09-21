@@ -1,5 +1,7 @@
 SAP ABAP
 
+SAP ABAP programlama dili ile gerçekleştirdiğim eğitim çalışmalarım.
+
 SAPABAP001
 Lenght-İki nokta(:) kullanımı-Yorum satırı-Write komutu-Matematiksel işlemler-IF koşulu-Case koşulu-Do döngüsü-WHILE döngüsü
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
