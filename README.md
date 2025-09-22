@@ -23,6 +23,7 @@ SAPABAP005
 Fonksiyon Grubu-Fonksiyon Modülü-Programda Fonksiyon Modülü Kullanma
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 SAPABAP006
+
 Class-Methods-Programda Kullanma-Types-Attributes-Friends-Events-Interfaces-Aliases
 
 <img width="211" height="104" alt="image" src="https://github.com/user-attachments/assets/18afe5b4-695e-4cdf-bbb2-09bad98c9694" />
