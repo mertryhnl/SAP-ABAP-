@@ -1,0 +1,33 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P006
+*&---------------------------------------------------------------------*
+*&Class-Methods-Programda Kullanma-Types-Attributes-Friends-Events-Interfaces-Aliases
+*&---------------------------------------------------------------------*
+REPORT zbk_p006.
+
+"PROGRAM içerisinde CLASS ve CLASS'a ait METHOD kullanma.
+DATA: gv_cl001 TYPE REF TO zbk_cl001. "Class'# kullanmak için önce refere etmemiz gereklidir (Instance Method).
+
+DATA: gv_num1   TYPE int4,
+      gv_num2   TYPE int4,
+      gv_result TYPE int4.
+
+START-OF-SELECTION.
+
+  CREATE OBJECT gv_cl001. "Class'# kullan#ma haz#r hale getirmek için bu kodu yazmam#z gerek.
+
+  gv_num1 = 12.
+  gv_num2 = 15.
+
+  "Art#k Class'a ait public methodlar# kullanabiliriz.
+  gv_cl001->sum_numbers(
+    EXPORTING
+      iv_num1   = gv_num1    " 4 Byte Signed Integer
+      iv_num2   = gv_num2    " 4 Byte Signed Integer
+    IMPORTING
+      ev_result = gv_result  " 4 Byte Signed Integer
+  ).
+
+  WRITE: / 'Sonuç:', gv_result.
+
+*zbk_cl001=>sum_numbers_v1( ). "E#er CLASS'#n içinde STAT#C METHOD tan#mlad#ysak referans vermeden direkt olarak o CLASS'# ca##r#p STAT#C METHOD'u kullanabiliriz.
