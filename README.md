@@ -26,6 +26,7 @@ SAPABAP006
 
 Class-Methods-Programda Kullanma-Types-Attributes-Friends-Events-Interfaces-Aliases
 
+
 <img width="211" height="104" alt="image" src="https://github.com/user-attachments/assets/18afe5b4-695e-4cdf-bbb2-09bad98c9694" />
 
 <img width="804" height="157" alt="image" src="https://github.com/user-attachments/assets/febbee74-d694-45e8-b8f5-a8e04e8b02b0" />
