@@ -1,0 +1,45 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_008
+*&---------------------------------------------------------------------*
+*&Message Type-Message View-Text Symbol-Message Class-Message with Parameters
+*&---------------------------------------------------------------------*
+REPORT zbk_008 MESSAGE-ID zbk_mc001.
+
+START-OF-SELECTION.
+
+*MESSAGE TYPE
+*  MESSAGE 'Hello Abap World' TYPE 'S'.
+*  MESSAGE 'Hello Abap World' TYPE 'I'.
+*  MESSAGE 'Hello Abap World' TYPE 'W'.
+*  MESSAGE 'Hello Abap World' TYPE 'E'.
+*  MESSAGE 'Hello Abap World' TYPE 'A'.
+*  MESSAGE 'Hello Abap World' TYPE 'X'.
+*END MESSAGE TYPE
+
+*MESSAGE VIEW
+*  MESSAGE 'Hello Abap World' TYPE 'S' DISPLAY LIKE 'E'.
+*  MESSAGE 'Hello Abap World' TYPE 'I' DISPLAY LIKE 'W'.
+*  MESSAGE 'Hello Abap World' TYPE 'W'.
+*  MESSAGE 'Hello Abap World' TYPE 'E'.
+*  MESSAGE 'Hello Abap World' TYPE 'A'.
+*  MESSAGE 'Hello Abap World' TYPE 'X'.
+*END MESSAGE VIEW
+
+*TEXT SYMBOL: Program#n localinde olu#turulur ve herhangi bir yerinde kullan#labilir.(Goto->Text Elements or 'F5')
+*  MESSAGE TEXT-000 TYPE 'I'.
+*  MESSAGE TEXT-001 TYPE 'S'.
+*ENDTEXT SYMBOL
+
+*MESSAGE CLASS
+*  MESSAGE i000(zbk_mc001). "E#er 6. sat#rda message class'#n#z# belirtmediyseniz bu #ekilde kullanmal#s#n#z.
+*  MESSAGE i000. "E#er 6. sat#rda message class'#n#z# belirttiyseniz bu #ekilde kullanmal#s#n#z.
+*END MESSAGE CLASS
+
+*Message with Parameters
+*  MESSAGE i001 WITH 'Hello abap world'. " Tek parametre ile
+*  DATA: lv_msg TYPE char20.
+*  lv_msg = 'Have a good day.'.
+*  MESSAGE i002 WITH 'Hello abap world' lv_msg . " Birden fazla parametre ile
+*END Message with Parameters
+
+  WRITE: 'Message'.
