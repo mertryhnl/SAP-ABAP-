@@ -1,0 +1,157 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P011
+*&---------------------------------------------------------------------*
+*&Text Field-Input Output Field-Radio Buton-Check Box-Dropdown-Box-Ok Code-Searchelp-Buton
+*&---------------------------------------------------------------------*
+REPORT zbk_p011.
+
+DATA: gv_ad    TYPE char20,
+      gv_soyad TYPE char30.
+
+DATA: gv_rad1 TYPE char1,
+      gv_rad2 TYPE xfeld. " xfeld standartt#r
+
+DATA: gv_cbox TYPE xfeld.
+
+DATA: gv_yas TYPE i.
+
+DATA: gv_id     TYPE vrm_id,
+      gs_value  TYPE vrm_value,
+      gt_values TYPE vrm_values.
+
+DATA: gv_indx TYPE i.
+
+DATA: ok_code TYPE sy-ucomm.
+
+DATA: gv_date TYPE datum.
+
+*AD
+*SOYAD
+*YAS
+*ZDATE
+*CBOX
+*CINSIYET
+
+DATA: gs_log TYPE zbk_t001.
+
+START-OF-SELECTION.
+
+  gv_indx = 18.
+  DO 60 TIMES.
+    gs_value-key = gv_indx.
+    gs_value-text = gv_indx.
+    APPEND gs_value TO gt_values.
+    gv_indx = gv_indx + 1.
+  ENDDO.
+
+  CALL  SCREEN 0100.
+*&---------------------------------------------------------------------*
+*& Module STATUS_0100 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+* SET TITLEBAR 'xxx'.
+
+
+  gv_id = 'GV_YAS'.
+
+*  gs_value-key = '1'.
+*  gs_value-text = '18-24 Ya#'.
+*  APPEND gs_value TO gt_values.
+*
+*  gs_value-key = '2'.
+*  gs_value-text = '24-35 Ya#'.
+*  APPEND gs_value TO gt_values.
+*
+*  gs_value-key = '3'.
+*  gs_value-text = '35-65 Ya#'.
+*  APPEND gs_value TO gt_values..
+
+  CALL FUNCTION 'VRM_SET_VALUES'
+    EXPORTING
+      id     = gv_id
+      values = gt_values
+*   EXCEPTIONS
+*     ID_ILLEGAL_NAME       = 1
+*     OTHERS = 2
+    .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+*  CASE sy-ucomm.
+  CASE ok_code.
+
+    WHEN '&BACK'.
+*      MESSAGE gv_ad TYPE 'I'.
+*      IF gv_rad1 eq 'X'.
+*      IF gv_rad1 EQ abap_true.
+*        MESSAGE 'Cinsiyet Kad#n Seçildi.' TYPE 'I'.
+*      ELSE.
+*        MESSAGE 'Cinsiyet Erkek Seçildi.' TYPE 'I'.
+*      ENDIF.
+*      IF gv_cbox EQ abap_true.
+*        MESSAGE 'Girdi#iniz bilgileri onaylad###n#z# beyan ettiniz.' TYPE 'I'.
+*      ELSE.
+*        MESSAGE 'Girdi#iniz bilgileri onaylamad#n#z. Lütfen kontrol edin!' TYPE 'I'.
+*      ENDIF.
+      LEAVE TO SCREEN 0.
+
+    WHEN '&CLEAR'.
+      PERFORM clear_data.
+    WHEN '&SAVE'.
+      PERFORM save_data.
+  ENDCASE.
+ENDMODULE.
+*&---------------------------------------------------------------------*
+*& Form clear_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM clear_data .
+  CLEAR: gv_ad,
+               gv_soyad,
+               gv_yas,
+               gv_cbox,
+               gv_date,
+               gv_rad2.
+
+  gv_rad1 = abap_true.
+ENDFORM.
+
+*&---------------------------------------------------------------------*
+*& Form save_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM save_data .
+  gs_log-ad = gv_ad.
+  gs_log-soyad = gv_soyad.
+  gs_log-cbox = gv_cbox.
+  gs_log-yas = gv_yas.
+  gs_log-zdate = gv_date.
+  IF gv_rad1 EQ abap_true.
+    gs_log-cinsiyet = 'K'.
+  ELSE.
+    gs_log-cinsiyet = 'E'.
+  ENDIF.
+  INSERT zbk_t001 FROM gs_log.
+  COMMIT WORK AND WAIT.
+
+  MESSAGE 'KAYIT BA#ARILI' TYPE 'I' DISPLAY LIKE 'S'.
+ENDFORM.
