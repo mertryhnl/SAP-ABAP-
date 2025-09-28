@@ -94,12 +94,25 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 ---
 
 ## SAPABAP012  
-### Gelişmiş Ekran elemanları
+### Gelişmiş Ekran Elemanları
 *Subscreen*
 
 <img width="259" height="530" alt="image" src="https://github.com/user-attachments/assets/4f9a8b3a-706f-4059-9ebd-bf86ea52cc55" />
 <img width="724" height="318" alt="image" src="https://github.com/user-attachments/assets/18c894ba-eebc-48e6-b772-ab4385979c91" />
 <img width="1003" height="463" alt="image" src="https://github.com/user-attachments/assets/fa94f320-6887-44ec-b41a-129660a9407b" />
+
+---
+
+## SAPABAP013
+### Gelişmiş Ekran Elemanları
+*Tabstrip*
+
+<img width="488" height="366" alt="image" src="https://github.com/user-attachments/assets/51433bf4-04bd-4ab1-84d9-14de5a76f4b2" />
+<img width="716" height="664" alt="image" src="https://github.com/user-attachments/assets/833c5ce9-3752-4b3c-a25e-67662d3b77ff" />
+<img width="732" height="694" alt="image" src="https://github.com/user-attachments/assets/a89edc12-4c20-445b-a7b6-2a2d177b66ed" />
+
+
+
 
 ---
 
