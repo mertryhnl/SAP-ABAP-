@@ -111,8 +111,23 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 <img width="716" height="664" alt="image" src="https://github.com/user-attachments/assets/833c5ce9-3752-4b3c-a25e-67662d3b77ff" />
 <img width="732" height="694" alt="image" src="https://github.com/user-attachments/assets/a89edc12-4c20-445b-a7b6-2a2d177b66ed" />
 
+---
 
+## SAPABAP014  
+### Ekran Objeleri
+*Dinamik ekran objeleri*
 
+<img width="727" height="408" alt="image" src="https://github.com/user-attachments/assets/fbf68e9f-31c6-4d58-abc7-164d0990b7a2" />
+<img width="270" height="426" alt="image" src="https://github.com/user-attachments/assets/6f074388-d303-4ed4-8281-2e2c38536afb" />
+
+---
+
+## SAPABAP015 
+### Ekran Objeleri
+*Modal Dialiog Box*
+
+<img width="1048" height="632" alt="image" src="https://github.com/user-attachments/assets/3cba8c8a-912a-4c5a-b37f-98967d8d170f" />
+<img width="264" height="342" alt="image" src="https://github.com/user-attachments/assets/842560fa-4dde-4329-95fa-46df841fbde7" />
 
 ---
 
