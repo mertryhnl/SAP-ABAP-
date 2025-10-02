@@ -1,0 +1,67 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P016
+*&---------------------------------------------------------------------*
+*&SALV
+*&---------------------------------------------------------------------*
+REPORT zbk_p016.
+
+DATA: gt_sbook TYPE TABLE OF sbook,
+      go_salv  TYPE REF TO cl_salv_table.
+
+
+START-OF-SELECTION.
+
+  SELECT * FROM sbook INTO TABLE gt_sbook.
+
+*Basic SALV
+*cl_salv_table=>factory(
+*  IMPORTING
+*    r_salv_table   = go_salv  " Basis Class Simple ALV Tables
+*  CHANGING
+*    t_table        = gt_sbook
+*).
+*
+*go_salv->display().
+
+  cl_salv_table=>factory(
+      IMPORTING
+        r_salv_table   = go_salv  " Basis Class Simple ALV Tables
+      CHANGING
+        t_table        = gt_sbook
+    ).
+
+  DATA: lo_display TYPE REF TO cl_salv_display_settings.
+
+  lo_display = go_salv->get_display_settings( ).
+  lo_display->set_list_header( value = 'SALV EXAMPLE' ). "Ba#l#k de#i#tirmek
+  lo_display->set_striped_pattern( value = 'X' ). "Zebra tonlamas#nda sat#rlar yapmak
+
+  DATA: lo_cols TYPE REF TO cl_salv_columns.
+
+  lo_cols = go_salv->get_columns( ).
+  lo_cols->set_optimize( value = 'X' ). "Kolonlar#n geni#li#i optimize etmek
+
+  DATA: lo_col TYPE REF TO cl_salv_column.
+
+  TRY .
+      lo_col = lo_cols->get_column( columnname = 'INVOICE' ). "Kolon ismini de#i#tirmek
+      lo_col->set_long_text( value = 'Fatura Düzenleyici').
+      lo_col->set_medium_text( value = 'Fatura Dznlyc' ).
+      lo_col->set_short_text( value = 'Ftr Dznl' ).
+    CATCH cx_salv_not_found.
+  ENDTRY.
+
+  TRY .
+      lo_col = lo_cols->get_column( columnname = 'MANDT' ). "Kolon ismini de#i#tirmek
+      lo_col->set_visible(
+        value = if_salv_c_bool_sap=>false " Boolean Variable (X=True, Space=False) "Kolonu gizlemek
+      ).
+    CATCH cx_salv_not_found.
+  ENDTRY.
+
+
+  go_salv->display(
+*  IMPORTING
+*    exit_caused_by_caller =
+*    exit_caused_by_user   =
+  ).
