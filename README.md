@@ -139,6 +139,14 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP017  
+### ALV
+*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout*
+
+<img width="762" height="1015" alt="image" src="https://github.com/user-attachments/assets/22027168-05ca-4b8d-a666-534b3b70f758" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
