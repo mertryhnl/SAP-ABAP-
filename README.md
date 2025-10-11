@@ -251,9 +251,18 @@ Satır seçimi yakalama
 
 ## SAPABAP017-4
 ### ALV
-*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout-CallBackEvents-Top of page-End of list-PF Status-User Command-Double click ve Hotspot-Satır seçimi yakalama*
+*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout-CallBackEvents-Top of page-End of list-PF Status-User Command-Double click ve Hotspot-Satır seçimi yakalama-*
 
 <img width="1427" height="1050" alt="image" src="https://github.com/user-attachments/assets/fcdb8909-c527-4010-a0d8-eadd9a537bb5" />
+
+---
+
+## SAPABAP017-5
+### ALV
+*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout-CallBackEvents-Top of page-End of list-PF Status-User Command-Double click ve Hotspot-Satır seçimi yakalama-Line Color-Cell Color-Birlikte kullanımı*
+
+<img width="989" height="1047" alt="image" src="https://github.com/user-attachments/assets/bef3f5b1-0e25-4330-870c-60ea47d29840" />
+<img width="255" height="625" alt="SAP COLOR" src="https://github.com/user-attachments/assets/1581f9ae-6493-4796-98e0-c386dad2ae4c" />
 
 ---
 ## SAPABAP..  
