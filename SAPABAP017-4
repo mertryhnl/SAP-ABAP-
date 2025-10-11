@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P017
+*&---------------------------------------------------------------------*
+*&Display Fonksiyonu-Field Catalog-Layout-Form ve Include
+*CallBackEvents-Top of pages-En of list
+*PF Status
+*User Command-Double click ve Hotspot-Sat#r seçimi yakalama
+*&---------------------------------------------------------------------*
+REPORT zbk_p017.
+
+INCLUDE zbk_p017_top.
+INCLUDE zbk_p017_frm.
+
+START-OF-SELECTION.
+
+PERFORM get_data.
+PERFORM set_fcat.
+PERFORM set_layout.
+PERFORM display_alv.
