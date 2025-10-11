@@ -172,6 +172,14 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 <img width="875" height="953" alt="image" src="https://github.com/user-attachments/assets/252aae48-d8f8-4d59-9e0b-e3e6df79969c" />
 
 ---
+
+## SAPABAP017-4
+### ALV
+*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout-CallBackEvents-Top of page-End of list-PF Status-User Command-Double click ve Hotspot-Satır seçimi yakalama*
+
+<img width="1427" height="1050" alt="image" src="https://github.com/user-attachments/assets/fcdb8909-c527-4010-a0d8-eadd9a537bb5" />
+
+---
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
