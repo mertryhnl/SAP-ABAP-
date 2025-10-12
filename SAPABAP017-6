@@ -4,7 +4,7 @@
 *&Display Fonksiyonu-Field Catalog-Layout-Form ve Include
 *CallBackEvents-Top of pages-En of list
 *PF Status
-*User Command-Double click ve Hotspot-Sat#r se�imi yakalama
+*User Command-Double click ve Hotspot-Sat#r seçimi yakalama
 *Line Color-Cell Color-Birlikte kullan#m#
 *Excluding-Sort-Filter
 *&---------------------------------------------------------------------*
@@ -19,3 +19,510 @@ PERFORM get_data.
 PERFORM set_fcat.
 PERFORM set_layout.
 PERFORM display_alv.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P017_TOP
+*&---------------------------------------------------------------------*
+
+*DATA: BEGIN OF gt_list OCCURS 0,
+*        ebeln LIKE ekko-ebeln,
+*        ebelp LIKE ekpo-ebelp,
+*        bstyp LIKE ekko-bstyp,
+*        bsart LIKE ekko-Bsart,
+*        matnr LIKE ekpo-matnr,
+*        menge LIKE ekpo-menge,
+*        meins LIKE ekpo-meins,
+*        maktg LIKE makt-maktg,
+*      END OF gt_list.
+
+TYPES: BEGIN OF gty_list,
+         selkz      TYPE char1,
+         ebeln      TYPE ebeln,
+         ebelp      TYPE ebelp,
+         bstyp      TYPE ebstyp,
+         bsart      TYPE esart,
+         matnr      TYPE matnr,
+         menge      TYPE bstmg,
+         meins      TYPE meins,
+         line_color TYPE char4,
+         cell_color TYPE slis_t_specialcol_alv,
+       END OF gty_list.
+
+DATA: gs_cell_color TYPE slis_specialcol_alv.
+
+DATA: gt_list TYPE TABLE OF gty_list,
+      gs_list TYPE gty_list.
+
+DATA: gt_fcat TYPE slis_t_fieldcat_alv,
+      gs_fcat TYPE slis_fieldcat_alv.
+
+DATA: gs_layout TYPE slis_layout_alv.
+
+DATA: gt_events TYPE slis_t_event,
+      gs_event  TYPE slis_alv_event.
+
+DATA: gt_exclude TYPE slis_t_extab,
+      gs_exclude TYPE slis_extab.
+
+DATA: gt_sort TYPE slis_t_sortinfo_alv,
+      gs_sort TYPE slis_sortinfo_alv.
+
+DATA: gt_filter TYPE slis_t_filter_alv,
+      gs_filter TYPE slis_filter_alv.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P017_FRM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT
+      ekko~ebeln
+      ekpo~ebelp
+      ekko~bstyp
+      ekko~bsart
+      ekpo~matnr
+      ekpo~menge
+      ekpo~meins
+       FROM ekko
+      INNER JOIN ekpo ON ekpo~ebeln EQ ekko~ebeln
+      INTO CORRESPONDING FIELDS OF TABLE gt_list.
+
+  LOOP AT gt_list INTO gs_list.
+
+    IF gs_list-ebelp EQ '10'.
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'MATNR'.
+      gs_cell_color-color-col = 6.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
+      MODIFY gt_list FROM gs_list.
+
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'EBELP'.
+      gs_cell_color-color-col = 7.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
+      MODIFY gt_list FROM gs_list.
+    ENDIF.
+
+    IF gs_list-ebelp EQ '20'.
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'EBELP'.
+      gs_cell_color-color-col = 4.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
+      MODIFY gt_list FROM gs_list.
+
+      CLEAR: gs_cell_color.
+      gs_cell_color-fieldname = 'BSTYP'.
+      gs_cell_color-color-col = 5.
+      gs_cell_color-color-int = 1.
+      gs_cell_color-color-inv = 0.
+      APPEND gs_cell_color TO gs_list-cell_color.
+      MODIFY gt_list FROM gs_list.
+    ENDIF.
+
+    IF gs_list-ebelp EQ '10'.
+*      gs_list-line_color = 'C110'.
+*      MODIFY gt_list FROM gs_list.
+*    ELSEIF gs_list-ebelp EQ '20'.
+*      gs_list-line_color = 'C210'.
+*      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '30'.
+      gs_list-line_color = 'C310'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '40'.
+      gs_list-line_color = 'C410'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '50'.
+      gs_list-line_color = 'C510'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '60'.
+      gs_list-line_color = 'C610'.
+      MODIFY gt_list FROM gs_list.
+    ELSEIF gs_list-ebelp EQ '70'.
+      gs_list-line_color = 'C710'.
+      MODIFY gt_list FROM gs_list.
+    ENDIF.
+  ENDLOOP.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+*  CALL FUNCTION 'REUSE_ALV_FIELDCATALOG_MERGE'
+*    EXPORTING
+*      i_program_name     = sy-repid
+*      i_internal_tabname = 'GT_LIST'
+**     I_STRUCTURE_NAME   =
+**     I_CLIENT_NEVER_DISPLAY       = 'X'
+*      i_inclname         = sy-repid
+**     I_BYPASSING_BUFFER =
+**     I_BUFFER_ACTIVE    =
+*    CHANGING
+*      ct_fieldcat        = gt_fcat
+**   EXCEPTIONS
+**     INCONSISTENT_INTERFACE       = 1
+**     PROGRAM_ERROR      = 2
+**     OTHERS             = 3
+*    .
+*  IF sy-subrc <> 0.
+** Implement suitable error handling here
+*  ENDIF.
+
+  PERFORM: set_fcat_sub USING 'EBELN' 'SAS NO'   'SAS Numaras#'     'SAS Numaras#'     abap_true '0' 'X',
+           set_fcat_sub USING 'EBELP' 'KALEM'    'KALEM'            'KALEM'            abap_true '1' '',
+           set_fcat_sub USING 'BSTYP' 'BLG Tipi' 'Belge Tipi'       'Belge Tipi'       ''        '2' '',
+           set_fcat_sub USING 'BSART' 'BLG Türü' 'Belge Türü'       'Belge Türü'       ''        '3' '',
+           set_fcat_sub USING 'MATNR' 'MLZM NO'  'Malzeme Numaras' 'Malzeme Numaras#' ''        '4' 'X',
+           set_fcat_sub USING 'MENGE' 'Miktar'   'Miktar'           'Miktar'           ''        '5' '',
+           set_fcat_sub USING 'MEINS' 'Ölç Brm'  'Ölçü Birimi'       'Ölçü Birimi'     ''        '6' ''.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat_sub
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat_sub USING p_fieldname
+                        p_seltext_s
+                        p_seltext_m
+                        p_seltext_l
+                        p_key
+                        p_col_pos
+                        p_hotspot.
+
+  CLEAR: gs_fcat.
+  gs_fcat-fieldname = p_fieldname.
+  gs_fcat-seltext_s = p_seltext_s.
+  gs_fcat-seltext_m = p_seltext_m.
+  gs_fcat-seltext_l = p_seltext_l.
+  gs_fcat-key       = p_key.
+  gs_fcat-col_pos   = p_col_pos.
+  gs_fcat-hotspot   = p_hotspot.
+  APPEND gs_fcat TO gt_fcat.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  gs_layout-window_titlebar   = 'REUSE ALV EXAMPLE'.
+  gs_layout-zebra             = abap_true.
+  gs_layout-colwidth_optimize = abap_true.
+  gs_layout-box_fieldname     = 'SELKZ'.
+  gs_layout-info_fieldname    = 'LINE_COLOR'.
+  gs_layout-coltab_fieldname  = 'CELL_COLOR'.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form display_alv
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_alv .
+
+  gs_event-name = slis_ev_top_of_page.
+  gs_event-form = 'TOP_OF_PAGE'.
+  APPEND gs_event TO gt_events.
+  gs_event-name = slis_ev_end_of_list.
+  gs_event-form = 'END_OF_LIST'.
+  APPEND gs_event TO gt_events.
+*  gs_event-name = slis_ev_pf_status_set.
+*  gs_event-form = 'PF_STATUS_SET'.
+*  APPEND gs_event TO gt_events.
+
+  gs_exclude-fcode = '&UMC'.
+  APPEND gs_exclude TO gt_exclude.
+
+  gs_exclude-fcode = '&INFO'.
+  APPEND gs_exclude TO gt_exclude.
+
+  gs_sort-spos      = 1.
+  gs_sort-tabname   = 'GT_LIST'.
+  gs_sort-fieldname = 'BSART'.
+  gs_sort-down      = abap_true.
+  APPEND gs_sort TO gt_sort.
+
+  gs_sort-spos      = 2.
+  gs_sort-tabname   = 'GT_LIST'.
+  gs_sort-fieldname = 'MENGE'.
+  gs_sort-up        = abap_true.
+  APPEND gs_sort TO gt_sort.
+
+  gs_filter-tabname   = 'GT_LIST'.
+  gs_filter-fieldname = 'EBELP'.
+  gs_filter-sign0     = 'I'.
+  gs_filter-optio     = 'EQ'.
+  gs_filter-valuf_int = 20.
+  APPEND gs_filter TO gt_filter.
+
+*  gs_filter-tabname   = 'GT_LIST'.
+*  gs_filter-fieldname = 'MEINS'.
+*  gs_filter-sign0     = 'I'.
+*  gs_filter-optio     = 'KGM'.
+*  gs_filter-valuf_int = 20.
+*  APPEND gs_filter TO gt_filter.
+
+  CALL FUNCTION 'REUSE_ALV_GRID_DISPLAY'
+    EXPORTING
+*     I_INTERFACE_CHECK       = ' '
+*     I_BYPASSING_BUFFER      = ' '
+*     I_BUFFER_ACTIVE         = ' '
+      i_callback_program      = sy-repid
+*     i_callback_pf_status_set = 'PF_STATUS_SET'
+      i_callback_user_command = 'USER_COMMAND'
+*     i_callback_top_of_page  = 'TOP_OF_PAGE'
+*     I_CALLBACK_HTML_TOP_OF_PAGE       = ' '
+*     I_CALLBACK_HTML_END_OF_LIST       = ' '
+*     I_STRUCTURE_NAME        =
+*     I_BACKGROUND_ID         = ' '
+*     I_GRID_TITLE            =
+*     I_GRID_SETTINGS         =
+      is_layout               = gs_layout
+      it_fieldcat             = gt_fcat
+      it_excluding            = gt_exclude
+*     IT_SPECIAL_GROUPS       =
+      it_sort                 = gt_sort
+      it_filter               = gt_filter
+*     IS_SEL_HIDE             =
+*     I_DEFAULT               = 'X'
+*     I_SAVE                  = ' '
+*     IS_VARIANT              =
+      it_events               = gt_events
+*     IT_EVENT_EXIT           =
+*     IS_PRINT                =
+*     IS_REPREP_ID            =
+*     I_SCREEN_START_COLUMN   = 0
+*     I_SCREEN_START_LINE     = 0
+*     I_SCREEN_END_COLUMN     = 0
+*     I_SCREEN_END_LINE       = 0
+*     I_HTML_HEIGHT_TOP       = 0
+*     I_HTML_HEIGHT_END       = 0
+*     IT_ALV_GRAPHICS         =
+*     IT_HYPERLINK            =
+*     IT_ADD_FIELDCAT         =
+*     IT_EXCEPT_QINFO         =
+*     IR_SALV_FULLSCREEN_ADAPTER        =
+*     O_PREVIOUS_SRAL_HANDLER =
+*     O_COMMON_HUB            =
+* IMPORTING
+*     E_EXIT_CAUSED_BY_CALLER =
+*     ES_EXIT_CAUSED_BY_USER  =
+    TABLES
+      t_outtab                = gt_list
+* EXCEPTIONS
+*     PROGRAM_ERROR           = 1
+*     OTHERS                  = 2
+    .
+  IF sy-subrc <> 0.
+* Implement suitable error handling here
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form top_of_page
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM top_of_page .
+  DATA: lt_header TYPE slis_t_listheader,
+        ls_header TYPE slis_listheader.
+
+  DATA: lv_date TYPE char10.
+
+  CLEAR ls_header.
+  ls_header-typ  = 'H'.
+  ls_header-info = 'Satın Alma Sipariş Raporu'.
+  APPEND ls_header TO lt_header.
+
+  CLEAR ls_header.
+  ls_header-typ  = 'S'.
+  ls_header-key  = 'Tarih:'.
+*  ls_header-info = '11/10/2025'.
+  CONCATENATE sy-datum+6(2)
+              '.'
+              sy-datum+4(2)
+              '.'
+              sy-datum+0(4)
+              INTO lv_date.
+  ls_header-info = lv_date.
+  APPEND ls_header TO lt_header.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      it_list_commentary = lt_header.
+*     I_LOGO                   =
+*     I_END_OF_LIST_GRID       =
+*     I_ALV_FORM               =
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form END_OF_LIST
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM end_of_list .
+  DATA: lt_header TYPE slis_t_listheader,
+        ls_header TYPE slis_listheader.
+
+  DATA: lv_lines   TYPE i,
+        lv_lines_c TYPE char4.
+
+  CLEAR ls_header.
+  DESCRIBE TABLE gt_list LINES lv_lines.
+  lv_lines_c = lv_lines.
+  ls_header-typ  = 'A'.
+*  ls_header-info = 'Bu raporda 50 adet satır vardır.'.
+  CONCATENATE 'Bu raporda'
+              lv_lines_c
+              'adet satır vardır.'
+              INTO ls_header-info SEPARATED BY space.
+  APPEND ls_header TO lt_header.
+
+  CALL FUNCTION 'REUSE_ALV_COMMENTARY_WRITE'
+    EXPORTING
+      it_list_commentary = lt_header.
+*     I_LOGO                   =
+*     I_END_OF_LIST_GRID       =
+*     I_ALV_FORM               =
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form PF_STATUS_SET
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM pf_status_set USING p_extab TYPE slis_t_extab.
+  SET PF-STATUS 'STANDARD'.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form USER_COMMAND
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM user_command USING p_ucomm     TYPE sy-ucomm
+                        ps_selfield TYPE slis_selfield.
+
+  DATA: lv_msg  TYPE char200,
+        lv_indx TYPE numc2.
+
+  CASE p_ucomm.
+    WHEN '&MSG'.
+      LOOP AT gt_list INTO gs_list WHERE selkz EQ 'X'.
+        lv_indx = lv_indx + 1.
+      ENDLOOP.
+      CONCATENATE 'Seçilen Satır Sayısı:'
+                      lv_indx
+                      INTO lv_msg
+                      SEPARATED BY space.
+      MESSAGE lv_msg TYPE 'I'.
+    WHEN '&IC1'.
+      CASE ps_selfield-fieldname.
+        WHEN 'EBELN'.
+          CONCATENATE ps_selfield-value
+                      'numaralı SAS tıklanmıştır'
+                      INTO lv_msg
+                      SEPARATED BY space.
+          MESSAGE lv_msg TYPE 'I'.
+        WHEN 'MATNR'.
+          CONCATENATE ps_selfield-value
+                      'numaralı malzeme tıklanmıştır'
+                      INTO lv_msg
+                      SEPARATED BY space.
+          MESSAGE lv_msg TYPE 'I'.
+      ENDCASE.
+  ENDCASE.
+ENDFORM.
