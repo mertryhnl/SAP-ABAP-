@@ -7,6 +7,7 @@
 *User Command-Double click ve Hotspot-Sat#r seçimi yakalama
 *Line Color-Cell Color-Birlikte kullan#m#
 *Excluding-Sort-Filter
+*Save-Variant
 *&---------------------------------------------------------------------*
 REPORT zbk_p017.
 
@@ -551,3 +552,4 @@ FORM user_command USING p_ucomm     TYPE sy-ucomm
       ENDCASE.
   ENDCASE.
 ENDFORM.
+
