@@ -4,82 +4,6 @@ Bu depo, **SAP ABAP** programlama dili ile gerçekleştirdiğim eğitim çalış
 Her bölüm, ABAP dilinin farklı kavramlarını örneklerle öğretmek üzere hazırlanmıştır.  
 Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ... şeklinde devam etmektedir.
 
-#İçerik
-
-Length  
-İki Nokta (:) Kullanımı  
-Yorum Satırı – Write Komutu 
-Matematiksel İşlemler  
-IF  
-CASE 
-DO 
-WHILE
-Variable  
-Structure  
-Table  
-Select  
-Update  
-Insert  
-Delete  
-Modify
-Parameters  
-Select Options  
-Checkbox  
-Radio Button  
-Selection Screen
-Event Blocks  
-Form  
-Global & Local  
-Include
-Fonksiyon Grubu  
-Fonksiyon Modülü  
-Programda Fonksiyon Modülü Kullanma
-Class  
-Methods  
-Programda Kullanma  
-Types  
-Attributes  
-Friends  
-Events  
-Interfaces  
-Aliases
-Local Class – Programda Kullanımı  
-Alt Class  
-Encapsulation
-Message Type  
-Message View  
-Text Symbol  
-Message Class  
-Message with Parameters
-Normal Screen  
-PBO ve PAI  
-GUI Title 
-GUI Status
-İşlev Tuşları  
-Uygulama Araçları Çubuğu 
-Menü Çubuğu
-Text Field  
-Input/Output Field 
-Radio Button 
-Check Box  
-Dropdown Box 
-OK Code  
-Search Help  
-Button
-Subscreen
-Tabstrip
-Dinamik ekran objeleri
-Modal Dialiog Box
-SALV
-RESUE ALV->Display Fonksiyonu-Field Catalog-Layout
-CallBackEvents
-Top of page
-End of list
-PF Status
-User Command
-Double click ve Hotspot
-Satır seçimi yakalama
-
 ---
 
 ## SAPABAP001  
@@ -263,6 +187,14 @@ Satır seçimi yakalama
 
 <img width="989" height="1047" alt="image" src="https://github.com/user-attachments/assets/bef3f5b1-0e25-4330-870c-60ea47d29840" />
 <img width="255" height="625" alt="SAP COLOR" src="https://github.com/user-attachments/assets/1581f9ae-6493-4796-98e0-c386dad2ae4c" />
+
+---
+
+## SAPABAP017-6
+### ALV
+*RESUE ALV->Display Fonksiyonu-Field Catalog-Layout-CallBackEvents-Top of page-End of list-PF Status-User Command-Double click ve Hotspot-Satır seçimi yakalama-Line Color-Cell Color-Birlikte kullanımı-Excluding-Sort-Filter*
+
+<img width="769" height="1028" alt="image" src="https://github.com/user-attachments/assets/e513f08b-b43f-48a3-a571-7d2ba5ed93f7" />
 
 ---
 ## SAPABAP..  
