@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_018
+*&---------------------------------------------------------------------*
+*&Select S#ngel-Select Up To Row
+*&---------------------------------------------------------------------*
+REPORT zbk_p018.
+
+DATA: gt_makt  TYPE TABLE OF makt,
+      gs_makt  TYPE makt,
+      gv_spras TYPE lang.
+
+START-OF-SELECTION.
+
+*"Select
+*  SELECT * FROM makt
+*    INTO TABLE gt_makt
+*    WHERE spras EQ 'EN'.
+*
+*  READ TABLE gt_makt INTO gs_makt INDEX 1.
+*
+*  WRITE: gs_makt-spras.
+
+*"Select Up To Row
+*  SELECT * UP TO 5 ROWS FROM makt
+*    INTO TABLE gt_makt
+*    WHERE spras EQ 'EN'.
+*
+*  READ TABLE gt_makt INTO gs_makt INDEX 1.
+*
+*  WRITE: gs_makt-spras.
+
+
+  "Select Single
+*  SELECT SINGLE * FROM makt
+*    INTO gs_makt
+*    WHERE spras EQ 'EN'.
+*
+*  WRITE: gs_makt-spras.
+
+  SELECT SINGLE spras FROM makt
+    INTO gv_spras
+    WHERE spras EQ 'EN'.
+
+  WRITE: gv_spras.
