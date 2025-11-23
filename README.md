@@ -212,6 +212,13 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 *Select Single-Select Up To Row*
 
 ---
+
+## SAPABAP018
+### READ
+*READ TABLE*
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
