@@ -213,12 +213,17 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
-## SAPABAP018
+## SAPABAP019
 ### READ
 *READ TABLE*
 
 ---
 
+## SAPABAP020
+### CORRESPONDING
+*CORRESPONDING FIELDS OF & MOVE-CORRESPONDING*
+
+---
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
