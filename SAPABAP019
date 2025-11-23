@@ -1,0 +1,40 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P019
+*&---------------------------------------------------------------------*
+*&READ TABLE
+*READ TABLE, internal table'da belirli bir sat#r# bulmak ve
+*o sat#r#n içeri#ini bir yap# veya alanlara almak için kullan#lan komuttur.
+*K#saca: ABAP iç tablosunda arama yapmak için kullan#l#r.
+*&---------------------------------------------------------------------*
+REPORT zbk_p019.
+
+DATA: gt_scarr TYPE TABLE OF scarr,
+      gs_scarr TYPE scarr.
+
+START-OF-SELECTION.
+
+  SELECT * FROM scarr
+    INTO TABLE gt_scarr.
+
+*"INDEX yöntemi ço#unlukla sa#l#kl# bir yöntem de#ildir.
+*READ TABLE gt_scarr INTO gs_scarr INDEX 2.
+*
+*WRITE: gs_scarr.
+
+*"BU yöntemde kar##la#aca##m#z problem ise arad###m#z de#er 'key' olmayabilir ve sistem bizi yanl## veriye yönlendirenilir.
+*READ TABLE gt_scarr INTO gs_scarr WITH KEY carrid = 'AC'.
+*
+*WRITE: gs_scarr.
+
+
+*"Bu yöntemde ya#ayaca##m#z problem ise birden fazla kay#t böyle olabilir o zaman da 'loop' kullanmal#y#z.
+*  READ TABLE gt_scarr INTO gs_scarr WITH KEY carrid = 'AC'
+*                                             carrname = 'Air Canada'.
+*
+*  WRITE: gs_scarr.
+
+LOOP AT gt_scarr INTO gs_scarr WHERE carrid = 'AC'.
+WRITE: gs_scarr.
+ENDLOOP.
+
+"NOT: READ TABLE yap#s#nda her zaman 'eq' mant### çal###r.
