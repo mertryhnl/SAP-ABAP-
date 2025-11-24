@@ -1,0 +1,44 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P023
+*&---------------------------------------------------------------------*
+*&FIELD SYMBOLS
+*Field Symbol, ABAP’ta “i#aretçi (pointer)” gibi çal##an, bir verinin gerçek bellekteki adresine ba#lanan, referans tipi bir de#i#kendir.
+*Yani Field Symbol kendi ba##na bir de#er tutmaz, ba#ka bir alan# i#aret eder ve onu temsil eder.
+*# 1. Dinamik yap# eri#imi
+*Program çal###rken hangi alan#n i#lenece#i bilinmiyorsa Field Symbol ile dinamik olarak belirlenebilir.
+*# 2. Kopyalama yok # Performans artar
+*Kopya veri olu#turmaz, do#rudan orijinal veri üzerinde çal###r.
+*# 3. #ç tablolar üzerinde h#zl# gezinme
+*LOOP içinde özellikle performans# art#r#r.
+*&---------------------------------------------------------------------*
+REPORT zbk_p023.
+
+DATA: gt_scarr TYPE TABLE OF scarr,
+      gs_scarr TYPE scarr.
+
+FIELD-SYMBOLS: <gfs_scarr> TYPE scarr.
+
+START-OF-SELECTION.
+
+  SELECT * FROM scarr
+    INTO TABLE gt_scarr.
+
+*"Bu kod içerisinde 'MODIFY' anahtar kelimesi structure yap#s#nda güncellenen veriyi internal tabloda da günceller.
+*"MODIFY anahtar sözcü#ü olmasayd# sadece structure yap#s#ndaki veriyi güncelleyecekti.
+*  LOOP AT gt_scarr INTO gs_scarr.
+*    IF gs_scarr-carrid EQ 'LH'.
+*      gs_scarr-carrname = 'MERT'.
+*      MODIFY gt_scarr FROM gs_scarr.
+*    ENDIF.
+*  ENDLOOP.
+
+  "FIELD SYMBOL sayesinde structure yap#s# okunurken anl#k olarak tablodan birde index al#n#yor.
+  "FIELD SYMBOL kullanmak daha pratik ve kontrollü.
+  "Göründü#ü gibi 'MODIFY' anahtar kelimesini kullanmam#za gerek yok.
+  LOOP AT gt_scarr ASSIGNING <gfs_scarr>.
+    IF <gfs_scarr>-carrid EQ 'LH'.
+      <gfs_scarr>-carrname = 'MERT'.
+    ENDIF.
+  ENDLOOP.
+
+  BREAK-POINT.
