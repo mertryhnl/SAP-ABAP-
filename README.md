@@ -224,6 +224,13 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 *CORRESPONDING FIELDS OF & MOVE-CORRESPONDING*
 
 ---
+
+## SAPABAP021
+### JOIN YAPILARI
+*INNER JOIN & LEFT JOIN & RIGHT JOIN*
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
