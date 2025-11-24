@@ -229,6 +229,10 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 ### JOIN YAPILARI
 *INNER JOIN & LEFT JOIN & RIGHT JOIN*
 
+<img width="325" height="267" alt="image" src="https://github.com/user-attachments/assets/7e3187b4-0f5d-4294-8f66-ba0dc53af937" />
+<img width="413" height="277" alt="image" src="https://github.com/user-attachments/assets/49d62bd2-76ff-44d4-bab3-76fe6436921d" />
+<img width="514" height="283" alt="image" src="https://github.com/user-attachments/assets/3165bbb3-716d-4ad9-ae07-3ac52bb64537" />
+
 ---
 
 ## SAPABAP..  
