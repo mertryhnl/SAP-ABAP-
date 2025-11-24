@@ -1,0 +1,103 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P021
+*&---------------------------------------------------------------------*
+*&SQL JOIN YAPILARI-> INNER JOIN & LEFT JOIN & RIGHT JOIN & ÇOKLU ÖRNEK
+*-------INNER JOIN-------
+*Yaln#zca iki tabloda da e#le#en kay#tlar# getirir.
+*E#le#meyen sat#rlar sonuçta görünmez.
+*En s#k kullan#lan JOIN türüdür.
+*Örnek:
+*ekpo ve ekko tablolar#n# sat#nalma belge numaras#na göre birle#tirirsen,
+*sadece her iki tabloda da var olan belge sat#rlar# gelir.
+*-------LEFT OUTER JOIN (LEFT JOIN)-------
+*Sol tablodaki tüm kay#tlar# getirir, sa# tabloda e#le#me olmayanlara NULL döner.
+*Sol tablo “öncelikli” tablodur.
+*Örnek:
+*ekko sol, ekpo sa# tabloysa:
+*Bütün sat#nalma belgeleri gelir; ama belgeye ba#l# sat#r yoksa, sat#r alanlar# bo# gelir.
+*-------RIGHT OUTER JOIN (RIGHT JOIN)-------
+*Sa# tablodaki tüm kay#tlar# getirir, sol tabloda e#le#me olmayanlara NULL döner.
+*Sa# tablo önceliklidir.
+*Not: ABAP’ta RIGHT JOIN daha az kullan#l#r; genelde LEFT JOIN tercih edilir.
+*&---------------------------------------------------------------------*
+REPORT zbk_p021.
+
+TYPES: BEGIN OF gty_ekipman,
+         ekipman_id  TYPE zbk_ekp_id,
+         ekipman_adi TYPE zbk_ekp_adi,
+         stok        TYPE zbk_ekp_adi,
+         en          TYPE zbk_ekp_en,
+         boy         TYPE zbk_ekp_boy,
+       END OF gty_ekipman.
+
+DATA: gt_ekipman TYPE TABLE OF gty_ekipman.
+
+START-OF-SELECTION.
+
+
+*-------INNER JOIN-------
+*SELECT * FROM zbk_t005
+* INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+
+*SELECT * FROM zbk_t005
+* INNER JOIN zbk_t006 ON zbk_t006~ekipman_id EQ zbk_t005~ekipman_id
+*   INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+
+**AS anahtar kelimesinin kullan#m#
+*SELECT * FROM zbk_t005 AS z5
+*  INNER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+*    INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+**-------INNER JOIN-------
+
+
+**-------left OUTER JOIN (LEFT join)-------
+*SELECT
+*  z5~ekipman_id
+*  z5~ekipman_adi
+*  z6~stok
+*  FROM zbk_t005 AS z5
+*  LEFT OUTER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+*  INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+**-------LEFT OUTER JOIN (LEFT JOIN)-------
+
+
+**-------RIGHT OUTER JOIN (RIGHT JOIN)-------
+*  SELECT
+*    z6~ekipman_id,
+*    z5~ekipman_adi,
+*    z6~stok
+*    FROM zbk_t005 AS z5
+*    RIGHT OUTER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+*    INTO CORRESPONDING FIELDS OF TABLE @gt_ekipman.
+*
+*  BREAK-POINT.
+**-------RIGHT OUTER JOIN (RIGHT JOIN)-------
+
+
+*------------ÇOKLU ÖRNEK--------------
+*  SELECT
+*    z5~ekipman_id
+*    z5~ekipman_adi
+*    z6~stok
+*    z7~en
+*    z7~boy
+*    FROM zbk_t005 AS z5
+*    INNER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+*    INNER JOIN zbk_t007 AS z7 ON z7~ekipman_id EQ z5~ekipman_id
+*    INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+*
+*  BREAK-POINT.
+
+    SELECT
+    z5~ekipman_id
+    z5~ekipman_adi
+    z6~stok
+    z7~en
+    z7~boy
+    FROM zbk_t005 AS z5
+    INNER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+    LEFT JOIN zbk_t007 AS z7 ON z7~ekipman_id EQ z5~ekipman_id
+    INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+
+  BREAK-POINT.
+*------------ÇOKLU ÖRNEK--------------
