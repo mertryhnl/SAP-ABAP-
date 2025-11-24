@@ -235,6 +235,12 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP022
+### FOR ALL ENTRIES IN
+*FOR ALL ENTRIES IN*
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
