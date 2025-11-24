@@ -1,0 +1,17 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P024
+*&---------------------------------------------------------------------*
+*&oo ALV-> SCREEN & CONTAINER & FULL SCREEN
+*&---------------------------------------------------------------------*
+REPORT zbk_p024.
+
+INCLUDE ZBK_P024_top.
+INCLUDE ZBK_P024_pbo.
+INCLUDE ZBK_P024_pai.
+INCLUDE ZBK_P024_frm.
+
+START-OF-SELECTION.
+
+  PERFORM get_data.
+
+  CALL SCREEN 0100.
