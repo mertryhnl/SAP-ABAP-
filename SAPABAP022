@@ -1,0 +1,46 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P022
+*&---------------------------------------------------------------------*
+*&FOR ALL ENTRIES IN
+*Bir 'internal' tablodaki de#erlere göre ba#ka bir tablodan toplu veri çekmek için kullan#lan ABAP SQL yap#s#d#r.
+*&---------------------------------------------------------------------*
+REPORT zbk_p022.
+
+*TYPES: BEGIN OF gty_ekipman,
+*         ekipman_id  TYPE zbk_ekp_id,
+*         ekipman_adi TYPE zbk_ekp_adi,
+*         stok        TYPE zbk_rkp_stok,
+*       END OF gty_ekipman.
+*
+*DATA: gt_ekipman TYPE TABLE OF gty_ekipman.
+*
+*START-OF-SELECTION.
+*
+*  SELECT * FROM zbk_t005 AS z5
+*    INNER JOIN zbk_t006 AS z6 ON z6~ekipman_id EQ z5~ekipman_id
+*    INTO CORRESPONDING FIELDS OF TABLE gt_ekipman.
+*
+*  BREAK-POINT.
+
+DATA: gt_table2     TYPE TABLE OF zbk_t005,
+      gt_table3     TYPE TABLE OF zbk_t006,
+      gt_table3_tmp TYPE TABLE OF zbk_t006.
+
+START-OF-SELECTION.
+
+  "Gerçek sistemlerde milyonlarca sat#r veri olabilir ve bu yüzden ihtiyac#m#z olmayan verileri bo#una çekmemeliyiz.
+  SELECT * FROM zbk_t005
+    INTO TABLE gt_table2.
+
+  SELECT * FROM zbk_t006
+    INTO TABLE gt_table3_tmp.
+
+  "NOT: 'FOR ALL ENTRIES IN' içine verdi#imiz tablo kesinlikle dolu olmal#.
+  IF gt_table2 IS NOT INITIAL.
+    SELECT * FROM zbk_t006
+        INTO TABLE gt_table3
+        FOR ALL ENTRIES IN gt_table2
+        WHERE ekipman_id EQ gt_table2-ekipman_id.
+  ENDIF.
+
+  BREAK-POINT.
