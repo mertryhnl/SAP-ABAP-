@@ -241,6 +241,12 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP023
+### FIELD SYMBOLS
+*FIELD SYMBOL*
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
