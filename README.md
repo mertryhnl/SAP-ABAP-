@@ -257,6 +257,14 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP024-1
+### OO ALV-
+*FIELDCATALOG & LAYOUT*
+
+<img width="770" height="435" alt="image" src="https://github.com/user-attachments/assets/d252e096-8aeb-493f-9a63-1ad11fdf6db6" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
