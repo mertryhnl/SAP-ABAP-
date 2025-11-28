@@ -1,4 +1,194 @@
 *&---------------------------------------------------------------------*
+*& Report ZBK_P024
+*&---------------------------------------------------------------------*
+*&OO ALV-> SCREEN & CONTAINER & FULL SCREEN
+*&OO ALV-> FIELDCATALOG & LAYOUT
+*&OO ALV-> FIELDCATALOG & MERGE
+*&OO ALV-> LINE COLOR & CELL COLOR
+*&OO ALV-> EDITABLE COLUMN
+*&OO ALV-> ICON CELL
+*&---------------------------------------------------------------------*
+REPORT zbk_p024.
+
+INCLUDE ZBK_P024_top.
+INCLUDE ZBK_P024_pbo.
+INCLUDE ZBK_P024_pai.
+INCLUDE ZBK_P024_frm.
+
+START-OF-SELECTION.
+
+  PERFORM get_data.
+  PERFORM set_fcat.
+  PERFORM set_layout.
+
+  CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_TOP
+*&---------------------------------------------------------------------*
+
+TYPE-POOLS icon.
+
+DATA: go_alv  TYPE REF TO cl_gui_alv_grid,
+      go_cont TYPE REF TO cl_gui_custom_container.
+
+
+TYPES: BEGIN OF gty_scarr,
+         durum    TYPE icon_d,
+         carrid   TYPE  s_carr_id,
+         carrname TYPE s_carrname,
+         currcode TYPE   s_currcode,
+         url      TYPE  s_carrurl,
+         cost     TYPE  int4,
+       END OF gty_scarr.
+
+DATA: gs_cell_color TYPE lvc_s_scol.
+
+DATA: gt_scarr  TYPE TABLE OF gty_scarr,
+      gs_scarr  TYPE gty_scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_fcat   TYPE lvc_s_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+FIELD-SYMBOLS: <gfs_fc>    TYPE lvc_s_fcat,
+               <gfs_scarr> TYPE gty_scarr.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_PBO
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Module STATUS_0100 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_PAI
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+    WHEN '&SAVE'.
+      PERFORM get_total_sum.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
 *& Include          ZBK_P024_FRM
 *&---------------------------------------------------------------------*
 *&---------------------------------------------------------------------*
@@ -146,13 +336,13 @@ ENDFORM.
 FORM set_layout .
   CLEAR: gs_layout.
 
-  "LAYOUT için yazd###m#z tüm kodlar tüm alv'yi etkiler.
-  gs_layout-cwidth_opt = abap_true.  "Tüm kolanlar# optimize eder.
-*  gs_layout-edit       = abap_true.  "Tüm kolonlar# yaz#labilir hale getirir.
+  "LAYOUT iÃ§in yazd###m#z tÃ¼m kodlar tÃ¼m alv'yi etkiler.
+  gs_layout-cwidth_opt = abap_true.  "TÃ¼m kolanlar# optimize eder.
+*  gs_layout-edit       = abap_true.  "TÃ¼m kolonlar# yaz#labilir hale getirir.
 *  gs_layout-no_toolbar = abap_true.  "Toolbar'# kapat#r.
-**  gs_layout-zebra      = abap_true.  "Görsel de#i#iklik yapar.
+**  gs_layout-zebra      = abap_true.  "GÃ¶rsel de#i#iklik yapar.
 *  gs_layout-info_fname = 'LINE_COLOR'. "Sat#rlar#n arka plan renginde de#i#iklik yapar.
-*  gs_layout-ctab_fname = 'CELL_COLOR'. "Hücrenin arka plan renginde de#i#iklik yapar.
+*  gs_layout-ctab_fname = 'CELL_COLOR'. "HÃ¼crenin arka plan renginde de#i#iklik yapar.
 ENDFORM.
 *&---------------------------------------------------------------------*
 *& Form get_total_sum
@@ -186,3 +376,4 @@ FORM get_total_sum .
   ENDLOOP.
 
 ENDFORM.
+
