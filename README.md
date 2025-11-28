@@ -290,6 +290,14 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP024-5
+### OO ALV
+*ICON CELL*
+
+<img width="475" height="336" alt="image" src="https://github.com/user-attachments/assets/5d1fabc4-62d5-44df-b2a9-5870e0ef0e64" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
