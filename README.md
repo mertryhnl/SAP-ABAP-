@@ -258,7 +258,7 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 ---
 
 ## SAPABAP024-1
-### OO ALV-
+### OO ALV
 *FIELDCATALOG & LAYOUT*
 
 <img width="770" height="435" alt="image" src="https://github.com/user-attachments/assets/d252e096-8aeb-493f-9a63-1ad11fdf6db6" />
@@ -266,7 +266,7 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 ---
 
 ## SAPABAP024-2
-### OO ALV-
+### OO ALV
 *FIELDCATALOG & MERGE*
 
 <img width="1905" height="1138" alt="image" src="https://github.com/user-attachments/assets/b2123451-8c4c-4d28-8c3d-70458462b8c2" />
@@ -274,11 +274,19 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 ---
 
 ## SAPABAP024-3
-### OO ALV-
+### OO ALV
 *LINE COLOR & CELL COLOR*
 
 <img width="431" height="335" alt="image" src="https://github.com/user-attachments/assets/1f2953a7-6ce4-45e6-8b11-22621197c9b3" />
 <img width="392" height="290" alt="image" src="https://github.com/user-attachments/assets/6a889fbb-2d7f-442e-b32f-e4ceac4d2f3d" />
+
+---
+
+## SAPABAP024-4
+### OO ALV
+*EDITABLE COLUMN*
+
+<img width="891" height="723" alt="image" src="https://github.com/user-attachments/assets/942978bd-56c3-4beb-8f5a-d209cc95339e" />
 
 ---
 
