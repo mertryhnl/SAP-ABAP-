@@ -21,3 +21,294 @@ START-OF-SELECTION.
   PERFORM set_layout.
 
   CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_TOP
+*&---------------------------------------------------------------------*
+DATA: go_alv  TYPE REF TO cl_gui_alv_grid,
+      go_cont TYPE REF TO cl_gui_custom_container.
+
+
+TYPES: BEGIN OF gty_scarr,
+         carrid   TYPE  s_carr_id,
+         carrname TYPE s_carrname,
+         currcode TYPE   s_currcode,
+         url      TYPE  s_carrurl,
+         cost     TYPE  int4,
+       END OF gty_scarr.
+
+DATA: gs_cell_color TYPE lvc_s_scol.
+
+DATA: gt_scarr  TYPE TABLE OF gty_scarr,
+      gs_scarr  TYPE gty_scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_fcat   TYPE lvc_s_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+FIELD-SYMBOLS: <gfs_fc>    TYPE lvc_s_fcat,
+               <gfs_scarr> TYPE gty_scarr.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_PBO
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Module STATUS_0100 OUTPUT
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_PAI
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*&      Module  USER_COMMAND_0100  INPUT
+*&---------------------------------------------------------------------*
+*       text
+*----------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+    WHEN '&SAVE'.
+      PERFORM get_total_sum.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P024_FRM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form display_alv
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_alv .
+*  CREATE OBJECT go_cont
+*    EXPORTING
+*      container_name = 'CC_ALV'.
+*
+*  CREATE OBJECT go_alv
+*    EXPORTING
+*      i_parent = go_cont.
+
+  CREATE OBJECT go_alv
+    EXPORTING
+      i_parent = cl_gui_container=>screen0.
+
+  CALL METHOD go_alv->set_table_for_first_display
+    EXPORTING
+*     i_buffer_active =                  " Buffering Active
+*     i_bypassing_buffer            =                  " Switch Off Buffer
+*     i_consistency_check           =                  " Starting Consistency Check for Interface Error Recognition
+*     i_structure_name =                  " Internal Output Table Structure Name
+*     is_variant      =                  " Layout
+*     i_save          =                  " Save Layout
+*     i_default       = 'X'              " Default Display Variant
+      is_layout       = gs_layout         " Layout
+*     is_print        =                  " Print Control
+*     it_special_groups             =                  " Field Groups
+*     it_toolbar_excluding          =                  " Excluded Toolbar Standard Functions
+*     it_hyperlink    =                  " Hyperlinks
+*     it_alv_graphics =                  " Table of Structure DTC_S_TC
+*     it_except_qinfo =                  " Table for Exception Quickinfo
+*     ir_salv_adapter =                  " Internal Usage only !!! - obsolete
+    CHANGING
+      it_outtab       = gt_scarr              " Output Table
+      it_fieldcatalog = gt_fcat                 " Field Catalog
+*     it_sort         =                  " Sort Criteria
+*     it_filter       =                  " Filter Criteria
+*    EXCEPTIONS
+*     invalid_parameter_combination = 1                " Wrong Parameter
+*     program_error   = 2                " Program Errors
+*     too_many_lines  = 3                " Too many Rows in Ready for Input Grid
+*     others          = 4
+    .
+  IF sy-subrc <> 0.
+*   MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*     WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+  ENDIF.
+
+*  CALL METHOD go_alv->register_edit_event
+*    EXPORTING
+*      i_event_id = cl_gui_alv_grid=>mc_evt_enter.
+
+  CALL METHOD go_alv->register_edit_event
+    EXPORTING
+      i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+    INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CLEAR: gs_fcat.
+
+  gs_fcat-fieldname = 'CARRID'.
+  gs_fcat-scrtext_s = 'A. Code'.
+  gs_fcat-scrtext_m = 'Airline Code'.
+  gs_fcat-scrtext_l = 'Airline Code'.
+  APPEND gs_fcat TO gt_fcat.
+
+  gs_fcat-fieldname = 'CARRNAME'.
+  gs_fcat-scrtext_s = 'A. name'.
+  gs_fcat-scrtext_m = 'Airline name'.
+  gs_fcat-scrtext_l = 'Airline name'.
+  APPEND gs_fcat TO gt_fcat.
+
+  gs_fcat-fieldname = 'CURRCODE'.
+  gs_fcat-scrtext_s = 'LOCAL CURR'.
+  gs_fcat-scrtext_m = 'Local currency of A.'.
+  gs_fcat-scrtext_l = 'Local currency of airline'.
+  APPEND gs_fcat TO gt_fcat.
+
+  gs_fcat-fieldname = 'URL'.
+  gs_fcat-scrtext_s = 'A. URL'.
+  gs_fcat-scrtext_m = 'Airline URL'.
+  gs_fcat-scrtext_l = 'Airline URL'.
+  APPEND gs_fcat TO gt_fcat.
+
+  gs_fcat-fieldname = 'COST'.
+  gs_fcat-scrtext_s = 'FİYAT'.
+  gs_fcat-scrtext_m = 'FİYAT'.
+  gs_fcat-scrtext_l = 'FİYAT'.
+  gs_fcat-edit      = abap_true.
+  APPEND gs_fcat TO gt_fcat.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+
+  "LAYOUT için yazdığımız tüm kodlar tüm alv'yi etkiler.
+  gs_layout-cwidth_opt = abap_true.  "Tüm kolanları optimize eder.
+*  gs_layout-edit       = abap_true.  "Tüm kolonları yazılabilir hale getirir.
+*  gs_layout-no_toolbar = abap_true.  "Toolbar'ı kapatır.
+**  gs_layout-zebra      = abap_true.  "Görsel değişiklik yapar.
+*  gs_layout-info_fname = 'LINE_COLOR'. "Satırların arka plan renginde değişiklik yapar.
+*  gs_layout-ctab_fname = 'CELL_COLOR'. "Hücrenin arka plan renginde değişiklik yapar.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_total_sum
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_total_sum .
+  DATA: lv_ttl_sum   TYPE int4,
+        lv_ttl_sum_c TYPE char10,
+        lv_mess      TYPE char200.
+
+  LOOP AT gt_scarr INTO gs_scarr.
+    lv_ttl_sum = lv_ttl_sum + gs_scarr-cost.
+  ENDLOOP.
+
+  lv_ttl_sum_c = lv_ttl_sum.
+
+  CONCATENATE 'Tüm satırların toplamı = '
+              lv_ttl_sum_c
+              INTO lv_mess.
+
+  MESSAGE lv_mess TYPE 'I'.
+ENDFORM.
