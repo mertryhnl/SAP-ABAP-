@@ -1,0 +1,19 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P025
+*&---------------------------------------------------------------------*
+*&oo ALV-> SPLIT CONTAINER
+*&---------------------------------------------------------------------*
+REPORT zbk_p025.
+
+INCLUDE zbk_p025_top.
+INCLUDE zbk_p025_pbo.
+INCLUDE zbk_p025_pai.
+INCLUDE zbk_p025_frm.
+
+START-OF-SELECTION.
+
+  PERFORM get_data.
+  PERFORM set_fcat.
+  PERFORM set_layout.
+
+  CALL SCREEN 0100.
