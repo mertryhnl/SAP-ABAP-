@@ -298,6 +298,15 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP024-6  
+### OO ALV
+*DROPDOWN CELL*
+
+<img width="841" height="358" alt="image" src="https://github.com/user-attachments/assets/bad2e004-cc81-407d-8685-7a9d46956102" />
+<img width="841" height="398" alt="image" src="https://github.com/user-attachments/assets/2c383512-ffd4-4f36-9ad9-dcc0bf6500b2" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *içerik*
