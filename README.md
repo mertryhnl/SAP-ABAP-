@@ -349,6 +349,14 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP028 
+### OO ALV
+*DOUBLE CLICK*
+
+<img width="982" height="645" alt="image" src="https://github.com/user-attachments/assets/94f8e63e-f4a4-4c9e-81ac-7739bc17f2be" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *İÇERİK*
