@@ -1,0 +1,21 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P028
+*&---------------------------------------------------------------------*
+*&OO ALV
+*&DOUBLE CLICK
+*&---------------------------------------------------------------------*
+REPORT ZBK_P028.
+
+INCLUDE zbk_p028_top.
+INCLUDE zbk_p028_cls.
+INCLUDE zbk_p028_pbo.
+INCLUDE zbk_p028_pai.
+INCLUDE zbk_p028_frm.
+
+START-OF-SELECTION.
+
+PERFORM get_data.
+PERFORM set_fcat.
+PERFORM set_layout.
+
+CALL SCREEN 0100.
