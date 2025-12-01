@@ -3,10 +3,6 @@
 *&---------------------------------------------------------------------*
 *&OO ALV EVENTS
 *&TOP OF PAGE
-*&HOTSPOT
-*&DOUBLE CLICK
-*&DATA CHANGED
-*&SEARCH HELP
 *&---------------------------------------------------------------------*
 REPORT ZBK_P026.
 
@@ -310,3 +306,4 @@ CLASS cl_event_receiver IMPLEMENTATION.
   ENDMETHOD.                    "handle_top_of_page
 
 ENDCLASS.
+
