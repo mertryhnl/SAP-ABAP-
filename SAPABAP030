@@ -19,3 +19,321 @@ PERFORM set_fcat.
 PERFORM set_layout.
 
 CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P030_TOP
+*&---------------------------------------------------------------------*
+DATA: go_grid TYPE REF TO cl_gui_alv_grid,
+      go_cust TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_scarr  TYPE TABLE OF scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+FIELD-SYMBOLS: <gfs_fcat>  TYPE lvc_s_fcat,
+               <gfs_scarr> TYPE scarr.
+
+CLASS cl_event_receiver DEFINITION DEFERRED.
+
+DATA: go_event_receiver TYPE REF TO cl_event_receiver.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P030_PBO
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P030_PAI
+*&---------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P030_FRM
+*&---------------------------------------------------------------------*
+
+FORM display_alv .
+  IF go_grid IS INITIAL.
+    CREATE OBJECT go_cust
+      EXPORTING
+        container_name = 'CC_ALV'.
+
+    CREATE OBJECT go_grid
+      EXPORTING
+        i_parent = go_cust.
+
+    PERFORM register_f4.
+
+    CREATE OBJECT go_event_receiver.
+
+    SET HANDLER go_event_receiver->handle_onf4 FOR go_grid.
+
+    CALL METHOD go_grid->set_table_for_first_display
+      EXPORTING
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_scarr
+        it_fieldcatalog = gt_fcat.
+
+    CALL METHOD go_grid->register_edit_event
+      EXPORTING
+        i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+  ELSE.
+    CALL METHOD go_grid->refresh_table_display.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  DATA(gt_scarr_tmp) = gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'SCARR'
+    CHANGING
+      ct_fieldcat      = gt_fcat.
+
+  LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
+    IF <gfs_fcat>-fieldname EQ 'CARRNAME'.
+      <gfs_fcat>-edit       = abap_true.
+*      <gfs_fcat>-f4availabl = abap_true.
+      <gfs_fcat>-style      = cl_gui_alv_grid=>mc_style_f4.
+    ENDIF.
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+  gs_layout-cwidth_opt = abap_true.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form register_f4
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM register_f4 .
+
+  DATA: lt_f4 TYPE lvc_t_f4,
+        ls_f4 TYPE lvc_s_f4.
+
+  CLEAR: ls_f4.
+  ls_f4-fieldname = 'CARRNAME'.
+  ls_f4-register  = abap_true.
+  APPEND ls_f4 TO lt_f4.
+
+  CALL METHOD go_grid->register_f4_for_fields
+    EXPORTING
+      it_f4 = lt_f4.                  " F4 Fields
+
+ENDFORM.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P030_CLS
+*&---------------------------------------------------------------------*
+CLASS cl_event_receiver DEFINITION.
+  PUBLIC SECTION.
+
+    METHODS handle_onf4                  " ONF4
+      FOR  EVENT onf4 OF cl_gui_alv_grid
+      IMPORTING
+        e_fieldname
+        e_fieldvalue
+        es_row_no
+        er_event_data
+        et_bad_cells
+        e_display.
+
+ENDCLASS.
+
+CLASS cl_event_receiver IMPLEMENTATION.
+
+  METHOD handle_onf4.
+    TYPES: BEGIN OF lty_value_tab,
+             carrname TYPE s_carrname,
+             carrdeff TYPE char20,
+           END OF lty_value_tab.
+
+    DATA: lt_value_tab TYPE TABLE OF lty_value_tab,
+          ls_value_tab TYPE lty_value_tab.
+
+    DATA: lt_return_tab TYPE TABLE OF ddshretval,
+          ls_return_tab TYPE ddshretval.
+
+    CLEAR: ls_value_tab.
+
+    ls_value_tab-carrname = 'Uçuş 1'.
+    ls_value_tab-carrdeff = 'Birinci Uçuş'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+    ls_value_tab-carrname = 'Uçuş 2'.
+    ls_value_tab-carrdeff = 'İkinci Uçuş'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+    ls_value_tab-carrname = 'Uçuş 3'.
+    ls_value_tab-carrdeff = 'Üçüncü Uçuş'.
+    APPEND ls_value_tab TO lt_value_tab.
+
+    CALL FUNCTION 'F4IF_INT_TABLE_VALUE_REQUEST'
+      EXPORTING
+        retfield     = 'CARRNAME'
+        window_title = 'CARRNAME F4'
+        value_org    = 'S'
+      TABLES
+        value_tab    = lt_value_tab
+        return_tab   = lt_return_tab.
+
+    READ TABLE lt_return_tab INTO ls_return_tab WITH KEY fieldname = 'F0001'.
+    IF sy-subrc EQ 0.
+      READ TABLE gt_scarr ASSIGNING <gfs_scarr> INDEX es_row_no-row_id.
+      IF sy-subrc EQ 0.
+        <gfs_scarr>-carrname = ls_return_tab-fieldval.
+
+        go_grid->refresh_table_display( ).
+      ENDIF.
+    ENDIF.
+
+    er_event_data->m_event_handled = 'X'.
+
+  ENDMETHOD.                    "handle_onf4
+
+ENDCLASS.
