@@ -234,98 +234,45 @@ ENDFORM.
 
 
 
-*&---------------------------------------------------------------------*
-*& Include          ZBK_P027_FRM
-*&---------------------------------------------------------------------*
+CLASS cl_event_receiver DEFINITION.
+  PUBLIC SECTION.
 
-*& Form display_alv
-*&---------------------------------------------------------------------*
-*& text
-*&---------------------------------------------------------------------*
-*& -->  p1        text
-*& <--  p2        text
-*&---------------------------------------------------------------------*
-FORM display_alv .
-  IF go_grid IS INITIAL.
-    CREATE OBJECT go_cust
-      EXPORTING
-        container_name = 'CC_ALV'.
+    METHODS handle_hotspot_click                  " HOT_SPOT_CLICK
+      FOR  EVENT hotspot_click OF cl_gui_alv_grid
+      IMPORTING
+        e_row_id
+        e_column_id.
 
-    CREATE OBJECT go_grid
-      EXPORTING
-        i_parent = go_cust.
+ENDCLASS.
 
-    CREATE OBJECT go_event_receiver.
+CLASS cl_event_receiver IMPLEMENTATION.
 
-    SET HANDLER go_event_receiver->handle_hotspot_click FOR go_grid.
+  METHOD handle_hotspot_click.
+    DATA: lv_mess TYPE char200.
 
-    CALL METHOD go_grid->set_table_for_first_display
-      EXPORTING
-        is_layout       = gs_layout
-      CHANGING
-        it_outtab       = gt_scarr
-        it_fieldcatalog = gt_fcat.
-  ELSE.
-    CALL METHOD go_grid->refresh_table_display.
-  ENDIF.
-ENDFORM.
-*&---------------------------------------------------------------------*
-*& Form get_data
-*&---------------------------------------------------------------------*
-*& text
-*&---------------------------------------------------------------------*
-*& -->  p1        text
-*& <--  p2        text
-*&---------------------------------------------------------------------*
-FORM get_data .
-  SELECT * FROM scarr
-      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
-
-  DATA(gt_scarr_tmp) = gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
-ENDFORM.
-*&---------------------------------------------------------------------*
-*& Form set_fcat
-*&---------------------------------------------------------------------*
-*& text
-*&---------------------------------------------------------------------*
-*& -->  p1        text
-*& <--  p2        text
-*&---------------------------------------------------------------------*
-FORM set_fcat .
-  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
-    EXPORTING
-      i_structure_name = 'SCARR'
-    CHANGING
-      ct_fieldcat      = gt_fcat.
-
-  LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
-    IF <gfs_fcat>-fieldname EQ 'CARRID' OR
-      <gfs_fcat>-fieldname EQ 'CARRNAME'.
-      <gfs_fcat>-hotspot = abap_true.
+    READ TABLE gt_scarr INTO gs_scarr INDEX e_row_id-index.
+    IF sy-subrc EQ 0.
+      CASE e_column_id-fieldname.
+        WHEN 'CARRID'.
+          CONCATENATE 'Tıklanan kolon'
+                      e_column_id-fieldname
+                      'değeri'
+                      gs_scarr-carrid
+                      INTO lv_mess
+                      SEPARATED BY space.
+          MESSAGE lv_mess TYPE 'I'.
+        WHEN 'CARRNAME'.
+          CONCATENATE 'Tıklanan kolon'
+                      e_column_id-fieldname
+                      'değeri'
+                      gs_scarr-carrname
+                      INTO lv_mess
+                        SEPARATED BY space.
+          MESSAGE lv_mess TYPE 'I'.
+      ENDCASE.
     ENDIF.
-  ENDLOOP.
-ENDFORM.
-*&---------------------------------------------------------------------*
-*& Form set_layout
-*&---------------------------------------------------------------------*
-*& text
-*&---------------------------------------------------------------------*
-*& -->  p1        text
-*& <--  p2        text
-*&---------------------------------------------------------------------*
-FORM set_layout .
-  CLEAR: gs_layout.
-  gs_layout-cwidth_opt = abap_true.
-ENDFORM.
+
+  ENDMETHOD.                    "handle_hotspot_click
+
+ENDCLASS.
+
