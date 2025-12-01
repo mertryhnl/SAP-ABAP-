@@ -19,3 +19,219 @@ PERFORM set_fcat.
 PERFORM set_layout.
 
 CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P028_TOP
+*&---------------------------------------------------------------------*
+DATA: go_grid TYPE REF TO cl_gui_alv_grid,
+      go_cust TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_scarr  TYPE TABLE OF scarr,
+      gs_scarr  TYPE scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+CLASS cl_event_receiver DEFINITION DEFERRED.
+
+DATA: go_event_receiver TYPE REF TO cl_event_receiver.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P028_PBO
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P028_PAI
+*&---------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P028_FRM
+*&---------------------------------------------------------------------*
+
+FORM display_alv .
+  IF go_grid IS INITIAL.
+    CREATE OBJECT go_cust
+      EXPORTING
+        container_name = 'CC_ALV'.
+
+    CREATE OBJECT go_grid
+      EXPORTING
+        i_parent = go_cust.
+
+    CREATE OBJECT go_event_receiver.
+
+    SET HANDLER go_event_receiver->handle_double_click FOR go_grid.
+
+    CALL METHOD go_grid->set_table_for_first_display
+      EXPORTING
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_scarr
+        it_fieldcatalog = gt_fcat.
+  ELSE.
+    CALL METHOD go_grid->refresh_table_display.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  DATA(gt_scarr_tmp) = gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'SCARR'
+    CHANGING
+      ct_fieldcat      = gt_fcat.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+  gs_layout-cwidth_opt = abap_true.
+ENDFORM.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P028_CLS
+*&---------------------------------------------------------------------*
+CLASS cl_event_receiver DEFINITION.
+  PUBLIC SECTION.
+
+    METHODS handle_double_click                  " DOUBLE_CLICK
+      FOR  EVENT double_click OF cl_gui_alv_grid
+      IMPORTING
+        e_row
+        e_column
+        es_row_no.
+
+ENDCLASS.
+
+CLASS cl_event_receiver IMPLEMENTATION.
+
+  METHOD handle_double_click.
+    DATA: lv_mess TYPE char200.
+
+    READ TABLE gt_scarr INTO gs_scarr INDEX e_row-index.
+    IF sy-subrc EQ 0.
+      CONCATENATE 'Tıklanan kolon'
+                  e_column-fieldname
+                  ', satırın değeri'
+                  gs_scarr
+                  INTO lv_mess
+                  SEPARATED BY space.
+      MESSAGE lv_mess TYPE 'I'.
+    ENDIF.
+  ENDMETHOD.                    "handle_double_click
+
+ENDCLASS.
