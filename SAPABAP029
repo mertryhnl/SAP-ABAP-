@@ -19,3 +19,246 @@ PERFORM set_fcat.
 PERFORM set_layout.
 
 CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P029_TOP
+*&---------------------------------------------------------------------*
+DATA: go_grid TYPE REF TO cl_gui_alv_grid,
+      go_cust TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_scarr  TYPE TABLE OF scarr,
+      gs_scarr  TYPE scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+FIELD-SYMBOLS: <gfs_fcat> TYPE lvc_s_fcat.
+
+CLASS cl_event_receiver DEFINITION DEFERRED.
+
+DATA: go_event_receiver TYPE REF TO cl_event_receiver.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P029_PBO
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P029_PAI
+*&---------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P029_FRM
+*&---------------------------------------------------------------------*
+FORM display_alv .
+  IF go_grid IS INITIAL.
+    CREATE OBJECT go_cust
+      EXPORTING
+        container_name = 'CC_ALV'.
+
+    CREATE OBJECT go_grid
+      EXPORTING
+        i_parent = go_cust.
+
+    CREATE OBJECT go_event_receiver.
+
+    SET HANDLER go_event_receiver->handle_data_changed FOR go_grid.
+
+    CALL METHOD go_grid->set_table_for_first_display
+      EXPORTING
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_scarr
+        it_fieldcatalog = gt_fcat.
+
+    CALL METHOD go_grid->register_edit_event
+      EXPORTING
+        i_event_id = cl_gui_alv_grid=>mc_evt_modified.
+  ELSE.
+    CALL METHOD go_grid->refresh_table_display.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  DATA(gt_scarr_tmp) = gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'SCARR'
+    CHANGING
+      ct_fieldcat      = gt_fcat.
+
+  LOOP AT gt_fcat ASSIGNING <gfs_fcat>.
+    IF <gfs_fcat>-fieldname EQ 'CARRNAME' OR
+      <gfs_fcat>-fieldname EQ 'URL'.
+      <gfs_fcat>-edit = abap_true.
+    ENDIF.
+  ENDLOOP.
+
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+  gs_layout-cwidth_opt = abap_true.
+ENDFORM.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P029_CLS
+*&---------------------------------------------------------------------*
+CLASS cl_event_receiver DEFINITION.
+  PUBLIC SECTION.
+
+    METHODS handle_data_changed                  " DATA_CHANGED
+      FOR  EVENT data_changed OF cl_gui_alv_grid
+      IMPORTING
+        er_data_changed
+        e_onf4
+        e_onf4_before
+        e_onf4_after
+        e_ucomm.
+
+ENDCLASS.
+
+CLASS cl_event_receiver IMPLEMENTATION.
+
+  METHOD handle_data_changed.
+    DATA: ls_modi TYPE lvc_s_modi,
+          lv_mess TYPE char200.
+
+    LOOP AT er_data_changed->mt_good_cells INTO ls_modi.
+
+      READ TABLE gt_scarr INTO gs_scarr INDEX ls_modi-row_id.
+      IF sy-subrc EQ 0.
+        CASE ls_modi-fieldname.
+          WHEN 'CARRNAME'.
+            CONCATENATE ls_modi-fieldname
+              '=> eski değer'
+              gs_scarr-carrname
+              ', yeni değer'
+              ls_modi-value
+              INTO lv_mess
+              SEPARATED BY space.
+          WHEN 'URL'.
+            CONCATENATE ls_modi-fieldname
+              '=> eski değer'
+              gs_scarr-url
+              ', yeni değer'
+              ls_modi-value
+              INTO lv_mess
+              SEPARATED BY space.
+        ENDCASE.
+        MESSAGE lv_mess TYPE 'I'.
+      ENDIF.
+    ENDLOOP.
+  ENDMETHOD.                    "handle_data_changed
+
+ENDCLASS.
