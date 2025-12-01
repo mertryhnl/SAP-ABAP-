@@ -23,3 +23,337 @@ PERFORM set_fcat.
 PERFORM set_layout.
 
 CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P026_TOP
+*&---------------------------------------------------------------------*
+DATA: go_grid TYPE REF TO cl_gui_alv_grid,
+      go_cust TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_scarr  TYPE TABLE OF scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_fcat   TYPE lvc_s_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+DATA: go_spli TYPE REF TO cl_gui_splitter_container,
+      go_sub1 TYPE REF TO cl_gui_container,
+      go_sub2 TYPE REF TO cl_gui_container.
+
+DATA: go_docu TYPE REF TO cl_dd_document.
+
+CLASS cl_event_receiver DEFINITION DEFERRED.
+
+DATA: go_event_receiver TYPE REF TO cl_event_receiver.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P026_PBO
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P026_PAI
+*&---------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P026_FRM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+*& Form display_alv
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_alv .
+  IF go_grid IS INITIAL.
+    CREATE OBJECT go_cust
+      EXPORTING
+        container_name = 'CC_ALV'.
+
+    CREATE OBJECT go_spli
+      EXPORTING
+        parent  = go_cust
+        rows    = 2
+        columns = 1.
+
+    CALL METHOD go_spli->get_container
+      EXPORTING
+        row       = 1
+        column    = 1
+      RECEIVING
+        container = go_sub1.
+
+    CALL METHOD go_spli->get_container
+      EXPORTING
+        row       = 2
+        column    = 1
+      RECEIVING
+        container = go_sub2.
+
+    CALL METHOD go_spli->set_row_height
+      EXPORTING
+        id     = 1
+        height = 15.
+
+    CREATE OBJECT go_docu
+      EXPORTING
+        style = 'ALV_GIRD'.
+
+    CREATE OBJECT go_grid
+      EXPORTING
+        i_parent = go_sub2.
+
+    CREATE OBJECT go_event_receiver.
+
+    SET HANDLER go_event_receiver->handle_top_of_page FOR go_grid.
+
+    CALL METHOD go_grid->set_table_for_first_display
+      EXPORTING
+        is_layout       = gs_layout
+      CHANGING
+        it_outtab       = gt_scarr
+        it_fieldcatalog = gt_fcat.
+
+    CALL METHOD go_grid->list_processing_events
+      EXPORTING
+        i_event_name = 'TOP_OF_PAGE'
+        i_dyndoc_id  = go_docu.
+
+  ELSE.
+    CALL METHOD go_grid->refresh_table_display.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  DATA(gt_scarr_tmp) = gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'SCARR'
+    CHANGING
+      ct_fieldcat      = gt_fcat.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+  gs_layout-cwidth_opt = abap_true.
+ENDFORM.
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P026_CLS
+*&---------------------------------------------------------------------*
+CLASS cl_event_receiver DEFINITION.
+  PUBLIC SECTION.
+
+    METHODS handle_top_of_page                   " TOP_OF_PAGE
+      FOR  EVENT top_of_page OF cl_gui_alv_grid
+      IMPORTING
+        e_dyndoc_id
+        table_index.
+
+
+    METHODS handle_hotspot_click                  " HOT_SPOT_CLICK
+      FOR  EVENT hotspot_click OF cl_gui_alv_grid
+      IMPORTING
+        e_row_id
+        e_column_id.
+
+
+    METHODS handle_double_click                   " DOUBLE_CLICK
+      FOR  EVENT double_click OF cl_gui_alv_grid
+      IMPORTING
+        e_row
+        e_column
+        es_row_no.
+
+
+    METHODS handle_data_changed                   " DATA_CHANGED
+      FOR  EVENT data_changed OF cl_gui_alv_grid
+      IMPORTING
+        er_data_changed
+        e_onf4
+        e_onf4_before
+        e_onf4_after
+        e_ucomm.
+
+
+    METHODS handle_onf4                           " ONF4
+      FOR  EVENT onf4 OF cl_gui_alv_grid
+      IMPORTING
+        e_fieldname
+        e_fieldvalue
+        es_row_no
+        er_event_data
+        et_bad_cells
+        e_display.
+
+ENDCLASS.
+
+CLASS cl_event_receiver IMPLEMENTATION.
+
+  METHOD handle_top_of_page.
+    DATA: lv_text TYPE sdydo_text_element.
+
+    lv_text = 'FLIGHT DETAILS'.
+
+    CALL METHOD go_docu->add_text
+      EXPORTING
+        text      = lv_text
+        sap_style = cl_dd_document=>heading.
+
+    CALL METHOD go_docu->new_line.
+
+    CLEAR: lv_text.
+
+    CONCATENATE 'User:' sy-uname INTO lv_text SEPARATED BY space.
+
+    CALL METHOD go_docu->add_text
+      EXPORTING
+        text         = lv_text
+        sap_color    = cl_dd_document=>list_positive
+        sap_fontsize = cl_dd_document=>medium.
+
+    CALL METHOD go_docu->display_document
+      EXPORTING
+        parent = go_sub1.
+
+  ENDMETHOD.                    "handle_top_of_page
+
+  METHOD handle_hotspot_click.
+    BREAK-POINT.
+  ENDMETHOD.                    "handle_hotspot_click
+
+  METHOD handle_double_click.
+    BREAK-POINT.
+  ENDMETHOD.                    "handle_double_click
+
+  METHOD handle_data_changed.
+    BREAK-POINT.
+  ENDMETHOD.                    "handle_data_changed
+
+  METHOD handle_onf4.
+    BREAK-POINT.
+  ENDMETHOD.                    "handle_onf4
+
+ENDCLASS.
