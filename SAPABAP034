@@ -54,3 +54,231 @@ START-OF-SELECTION.
   PERFORM set_layout.
 
   CALL SCREEN 0100.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P034_TOP
+*&---------------------------------------------------------------------*
+DATA: go_grid TYPE REF TO cl_gui_alv_grid,
+      go_cust TYPE REF TO cl_gui_custom_container.
+
+DATA: gt_scarr  TYPE TABLE OF scarr,
+      gt_fcat   TYPE lvc_t_fcat,
+      gs_layout TYPE lvc_s_layo.
+
+DATA: gs_variant      TYPE disvariant,
+      gs_variant_temp TYPE disvariant.
+
+PARAMETERS: p_vari TYPE disvariant-variant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P034_PBO
+*&---------------------------------------------------------------------*
+MODULE status_0100 OUTPUT.
+  SET PF-STATUS '0100'.
+  SET TITLEBAR '0100'.
+
+  PERFORM display_alv.
+
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P034_PAI
+*&---------------------------------------------------------------------*
+MODULE user_command_0100 INPUT.
+  CASE sy-ucomm.
+    WHEN '&BACK'.
+      SET SCREEN 0.
+  ENDCASE.
+ENDMODULE.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+*&---------------------------------------------------------------------*
+*& Include          ZBK_P034_FRM
+*&---------------------------------------------------------------------*
+*&---------------------------------------------------------------------*
+
+*& Form display_alv
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM display_alv .
+  IF go_grid IS INITIAL.
+    CREATE OBJECT go_cust
+      EXPORTING
+        container_name = 'CC_ALV'.
+
+    CREATE OBJECT go_grid
+      EXPORTING
+        i_parent = go_cust.
+
+*I_SAVE = ' '  --> Display variants cannot be saved
+*I_SAVE = 'X'  --> Standard save mode
+*I_SAVE = 'U'  --> User-specific save mode
+*I_SAVE = 'A'  --> Standard and user-specific save mode
+
+    gs_variant-report  = sy-repid.
+    gs_variant-variant = p_vari.
+
+    CALL METHOD go_grid->set_table_for_first_display
+      EXPORTING
+*       i_buffer_active =                  " Buffering Active
+*       i_bypassing_buffer            =                  " Switch Off Buffer
+*       i_consistency_check           =                  " Starting Consistency Check for Interface Error Recognition
+*       i_structure_name              =                  " Internal Output Table Structure Name
+        is_variant      = gs_variant                 " Layout
+        i_save          = 'A'               " Save Layout
+*       i_default       = 'X'              " Default Display Variant
+        is_layout       = gs_layout         " Layout
+*       is_print        =                  " Print Control
+*       it_special_groups             =                  " Field Groups
+*       it_toolbar_excluding          =                  " Excluded Toolbar Standard Functions
+*       it_hyperlink    =                  " Hyperlinks
+*       it_alv_graphics =                  " Table of Structure DTC_S_TC
+*       it_except_qinfo =                  " Table for Exception Quickinfo
+*       ir_salv_adapter =                  " Internal Usage only !!! - obsolete
+      CHANGING
+        it_outtab       = gt_scarr          " Output Table
+        it_fieldcatalog = gt_fcat           " Field Catalog
+*       it_sort         =                  " Sort Criteria
+*       it_filter       =                  " Filter Criteria
+*      EXCEPTIONS
+*       invalid_parameter_combination = 1                " Wrong Parameter
+*       program_error   = 2                " Program Errors
+*       too_many_lines  = 3                " Too many Rows in Ready for Input Grid
+*       others          = 4
+      .
+    IF sy-subrc <> 0.
+*     MESSAGE ID SY-MSGID TYPE SY-MSGTY NUMBER SY-MSGNO
+*       WITH SY-MSGV1 SY-MSGV2 SY-MSGV3 SY-MSGV4.
+    ENDIF.
+  ELSE.
+    CALL METHOD go_grid->refresh_table_display.
+  ENDIF.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form get_data
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM get_data .
+  SELECT * FROM scarr
+      INTO CORRESPONDING FIELDS OF TABLE gt_scarr.
+
+  DATA(gt_scarr_tmp) = gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+  APPEND LINES OF gt_scarr_tmp TO gt_scarr.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_fcat
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_fcat .
+  CALL FUNCTION 'LVC_FIELDCATALOG_MERGE'
+    EXPORTING
+      i_structure_name = 'SCARR'
+    CHANGING
+      ct_fieldcat      = gt_fcat.
+ENDFORM.
+*&---------------------------------------------------------------------*
+*& Form set_layout
+*&---------------------------------------------------------------------*
+*& text
+*&---------------------------------------------------------------------*
+*& -->  p1        text
+*& <--  p2        text
+*&---------------------------------------------------------------------*
+FORM set_layout .
+  CLEAR: gs_layout.
+  gs_layout-cwidth_opt = abap_true.
+ENDFORM.
