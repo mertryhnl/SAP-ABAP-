@@ -394,6 +394,16 @@ Programlar sırasıyla numaralandırılmıştır: `SAPABAP001`, `SAPABAP002`, ..
 
 ---
 
+## SAPABAP033
+### OO ALV
+*EXCLUDING & SORT & FILTER*
+
+<img width="802" height="187" alt="image" src="https://github.com/user-attachments/assets/0f01d662-a75d-48ea-aac8-b88b41091266" />
+<img width="630" height="844" alt="image" src="https://github.com/user-attachments/assets/22ebedd3-0379-4e9f-a07f-fc0665a7f129" />
+<img width="597" height="803" alt="image" src="https://github.com/user-attachments/assets/33053772-db1b-44c6-a083-4b7ece91185f" />
+
+---
+
 ## SAPABAP..  
 ### BAŞLIK
 *İÇERİK*
