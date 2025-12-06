@@ -1,0 +1,20 @@
+*&---------------------------------------------------------------------*
+*& Report ZBK_P032
+*&---------------------------------------------------------------------*
+*&
+*&---------------------------------------------------------------------*
+REPORT ZBK_P032.
+
+INCLUDE zbk_p032_top.
+INCLUDE zbk_p032_cls.
+INCLUDE zbk_p032_pbo.
+INCLUDE zbk_p032_pai.
+INCLUDE zbk_p032_frm.
+
+START-OF-SELECTION.
+
+PERFORM get_data.
+PERFORM set_fcat.
+PERFORM set_layout.
+
+CALL SCREEN 0100.
